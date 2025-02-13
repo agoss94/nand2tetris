@@ -14,5 +14,8 @@ CHIP PC {
     OUT out[16];
     
     PARTS:
-    //// Replace this comment with your code.
+    Inc16(in=outT, out=outTPlus1);
+    Mux8Way16(a=outT, b=outTPlus1, c=in, d=in, e=false, f=false, g=false, h=false, sel[0]=inc, sel[1]=load, sel[2]=reset, out=outMux);
+    Register(in=outMux, load=true, out=outT, out=out);
 }
+
