@@ -8,7 +8,6 @@
 // i.e. writes "black" in every pixel. When no key is pressed, 
 // the screen should be cleared.
 
-//// Replace this comment with your code.
 (RESET)
     @SCREEN
     D=A
