@@ -32,5 +32,40 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-	//// Replace this comment with your code.
+    Mux16(a=instruction, b=outAlu, sel=instruction[15], out=inA); // Either A or C instruction
+    Mux(a=true, b=instruction[5], sel=instruction[15], out=loadA); // Load into A if A instruction or controll bit 5 is 1
+    ARegister(in=inA, load=loadA, out=outA, out[0..14]=addressM); //A Register
+    Mux16(a=outA, b=inM, sel=instruction[12], out=outAOrOutM); //input M or A into Alu depending on controll bit 12
+    ALU(
+        x=outD, 
+        y=outAOrOutM, 
+        zx=instruction[11], 
+        nx=instruction[10], 
+        zy=instruction[9], 
+        ny=instruction[8], 
+        f=instruction[7], 
+        no=instruction[6], 
+        out=outAlu, 
+        out=outM, 
+        zr=zr, 
+        ng=ng
+    );
+    DRegister(in=outAlu, load=instruction[4], out=outD); //D Register
+
+    //writeM
+    And(a=instruction[3], b=instruction[15], out=writeM);
+
+    //jump directives
+    Or(a = ng, b = zr, out = le);
+    Not(in = le, out = gt);
+    And(a = instruction[0], b = gt, out = JGT);
+    And(a = instruction[1], b = zr, out = JEQ);
+    And(a = instruction[2], b = ng, out = JLT);
+    
+    Or(a = JEQ, b = JLT, out = JLE);
+    Or(a = JLE, b = JGT, out = jumpToA);
+    And(a = jumpToA, b = instruction[15], out = jump);
+    Not(in = jump, out = isInc);
+    
+    PC(in=outA, load=jump, inc=isInc, reset=reset, out[0..14]=pc);
 }
