@@ -36,6 +36,8 @@ CHIP CPU {
     Mux(a=true, b=instruction[5], sel=instruction[15], out=loadA); // Load into A if A instruction or controll bit 5 is 1
     ARegister(in=inA, load=loadA, out=outA, out[0..14]=addressM); //A Register
     Mux16(a=outA, b=inM, sel=instruction[12], out=outAOrOutM); //input M or A into Alu depending on controll bit 12
+    And(a = instruction[4], b = instruction[15], out = loadD);
+    DRegister(in=outAlu, load=loadD, out=outD); //D Register
     ALU(
         x=outD, 
         y=outAOrOutM, 
@@ -50,7 +52,6 @@ CHIP CPU {
         zr=zr, 
         ng=ng
     );
-    DRegister(in=outAlu, load=instruction[4], out=outD); //D Register
 
     //writeM
     And(a=instruction[3], b=instruction[15], out=writeM);
@@ -62,8 +63,7 @@ CHIP CPU {
     And(a = instruction[1], b = zr, out = JEQ);
     And(a = instruction[2], b = ng, out = JLT);
     
-    Or(a = JEQ, b = JLT, out = JLE);
-    Or(a = JLE, b = JGT, out = jumpToA);
+    Or8Way(in[0] = JGT, in[1] = JEQ, in[2] = JLT, in[3..7] = false, out=jumpToA);
     And(a = jumpToA, b = instruction[15], out = jump);
     Not(in = jump, out = isInc);
     

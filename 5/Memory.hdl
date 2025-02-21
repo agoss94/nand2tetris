@@ -29,10 +29,20 @@ CHIP Memory {
     // RAM      0000 - 3FFF <=> 0000 0000 0000 0000 - 0011 1111 1111 1111   // hexadecimal <=> binary
     // SCREEN   4000 - 5FFF <=> 0100 0000 0000 0000 - 0101 1111 1111 1111   // hexadecimal <=> binary
     // KBD      6000        <=> 0110 0000 0000 0000
-    DMux4Way(in=load, sel[1] = address[14], sel[0] = address[13], a=load1, b=load2, c=loadScreen);
-    Or(a = load1, b = load2, out = loadRAM);
-    RAM16K(in=in, load=loadRAM, address=address[0..13], out=outRAM);
-    Screen(in=in, load=loadScreen, address=address[0..12], out=outScreen);
-    Keyboard(out=outKeyboard);
-    Mux4Way16(a=outRAM, b=outRAM, c=outScreen, d=outKeyboard, sel[1]=address[14], sel[0]=address[13], out=out);
+    //DMux4Way(in=load, sel[1] = address[14], sel[0] = address[13], a=load1, b=load2, c=loadScreen);
+    //Or(a = load1, b = load2, out = loadRAM);
+    //RAM16K(in=in, load=loadRAM, address=address[0..13], out=outRAM);
+    //Screen(in=in, load=loadScreen, address=address[0..12], out=outScreen);
+    //Keyboard(out=outKeyboard);
+    //Mux4Way16(a=outRAM, b=outRAM, c=outScreen, d=outKeyboard, sel[1]=address[14], sel[0]=address[13], out=out);
+
+    DMux4Way(in=load, sel=address[13..14], a=selRam1, b=selRam2, c=selScreen, d=selKbd);
+      Or(a=selRam1, b=selRam2, out=selRam);
+      
+      RAM16K(in=in, load=selRam, address=address[0..13], out=outRam);         // RAM
+      Screen(in=in, load=selScreen, address=address[0..12], out=outScreen);   // Screen
+      Keyboard(out=outKbd);                                                   // KBD - we don't ACTUALLY write in RAM..
+    
+    // select what to output
+      Mux4Way16(a=outRam, b=outRam, c=outScreen, d=outKbd, sel=address[13..14], out=out);
 }
