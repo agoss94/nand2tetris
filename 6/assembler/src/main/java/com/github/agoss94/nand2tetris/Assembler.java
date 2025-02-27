@@ -13,7 +13,7 @@ public class Assembler {
 
     private static StringBuilder binaryBuilder;
 
-    private static int nextAddress = 15;
+    private static int nextAddress = 16;
 
     public static void main(String[] args) {
         System.out.printf("Read assembly file %s%n", args[0]);
@@ -25,7 +25,7 @@ public class Assembler {
         Path filePath = Path.of(args[0]);
         parser = new Parser(filePath);
         table = new SymbolTable();
-        int counter = 0;
+        int counter = -1;
         while (parser.hasMoreLines()) {
             parser.advance();
             switch (parser.instructionType()) {
@@ -70,8 +70,9 @@ public class Assembler {
     }
 
     private static void handleCInstruction() {
-        binaryBuilder.append("111").append(Code.dest(parser.dest()))
+        binaryBuilder.append("111")
                 .append(Code.comp(parser.comp()))
+                .append(Code.dest(parser.dest()))
                 .append(Code.jump(parser.jump())).append(String.format("%n"));
     }
 
@@ -82,7 +83,8 @@ public class Assembler {
         int address;
         if (!Character.isDigit(symbol.toCharArray()[0])) {
             if (!table.contains(symbol)) {
-                table.addEntry(symbol, nextAddress++);
+                table.addEntry(symbol, nextAddress);
+                nextAddress++;
             }
             address = table.getAddress(symbol);
         } else {
@@ -90,7 +92,7 @@ public class Assembler {
         }
         String binaryAddress = Integer.toBinaryString(address);
         int numberOfZeros = 15 - binaryAddress.length();
-        binaryAddress = binaryAddress.concat("0".repeat(numberOfZeros + 1));
+        binaryAddress = "0".repeat(numberOfZeros + 1).concat(binaryAddress);
         binaryBuilder.append(binaryAddress).append(String.format("%n"));
     }
 }

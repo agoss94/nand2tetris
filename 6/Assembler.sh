@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Path to the JAR file
-JAR_FILE="./assembler/target/assembler-1.0.jar"
+JAR_FILE="./assembler-1.0.jar"
 
 # Main class to run
 MAIN_CLASS="com.github.agoss94.nand2tetris.Assembler"
