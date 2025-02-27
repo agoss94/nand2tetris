@@ -1,8 +1,7 @@
-package nand2tetris.agoss94.com.github;
+package com.github.agoss94.nand2tetris;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 

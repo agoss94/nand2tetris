@@ -1,13 +1,10 @@
-package nand2tetris.agoss94.com.github;
+package com.github.agoss94.nand2tetris;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.*;
 

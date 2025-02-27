@@ -1,10 +1,9 @@
-package nand2tetris.agoss94.com.github;
+package com.github.agoss94.nand2tetris;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

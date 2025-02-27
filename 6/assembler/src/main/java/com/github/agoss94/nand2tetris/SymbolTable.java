@@ -1,4 +1,4 @@
-package nand2tetris.agoss94.com.github;
+package com.github.agoss94.nand2tetris;
 
 import java.util.HashMap;
 import java.util.Map;
